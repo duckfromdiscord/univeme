@@ -1,5 +1,6 @@
 use std::error::Error;
 
+pub mod ledfx;
 pub mod pprefox;
 pub mod windows;
 pub mod wpeng;

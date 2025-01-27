@@ -6,6 +6,7 @@ A tool to theme many programs at once. More programs will be added over time.
 
 ## Support
 
+- [LedFx](https://github.com/LedFx/LedFx) scenes (control your computer or even the entire house with OpenRGB, WLED, and more!)
 - Firefox themes (through [pprefox](https://github.com/duckfromdiscord/pprefox))
 - Windows themes, and light/dark schemes - not fully tested
 - Windows cursors!
@@ -53,4 +54,12 @@ Setting a cursor scheme:
 [[windows]]
 comment = "..."
 cursor_scheme = "..."
+```
+
+### Ledfx
+Not setting a `scene_name` will deactivate all scenes.
+```toml
+[[ledfx]]
+endpoint = "http://127.0.0.1:8888/"
+scene_name = "..."
 ```

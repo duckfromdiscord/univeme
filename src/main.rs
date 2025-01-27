@@ -3,10 +3,7 @@ use reqwest::Url;
 use std::{collections::HashMap, fs, str::FromStr};
 use univeme::{
     connectors::{
-        pprefox::Pprefox,
-        windows::{CursorScheme, Windows},
-        wpeng::Wpeng,
-        Connector,
+        ledfx::Ledfx, pprefox::Pprefox, windows::{CursorScheme, Windows}, wpeng::Wpeng, Connector
     },
     toml::Config,
 };
@@ -15,6 +12,7 @@ pub enum ConnectorConfig {
     Pprefox(Pprefox),
     Windows(Windows),
     Wpeng(Wpeng),
+    Ledfx(Ledfx)
 }
 
 /// the universal theme tool
@@ -89,6 +87,25 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             connectors.push(ConnectorConfig::Wpeng(connector));
         }
     }
+    for ledfx in config.ledfx.unwrap_or_default() {
+        let mut connector = Ledfx::new()?;
+        let endpoint = match ledfx.endpoint {
+            None => None,
+            Some(endpoint) => Some(Url::from_str(&endpoint)?),
+        };
+        connector.endpoint = endpoint;
+        let scenes = connector.get_available_scenes().await?;
+        if let Some(scene_name) = ledfx.scene_name {
+            match scenes.get(&scene_name) {
+                None => panic!("Ledfx theme not found: {}", scene_name),
+                Some(id) => {
+                    connector.scene_id = Some(id.to_string());
+                }
+            }
+        }
+        // Otherwise, None (default) to reset
+        connectors.push(ConnectorConfig::Ledfx(connector));
+    }
     for connector in connectors {
         match connector {
             ConnectorConfig::Pprefox(pprefox) => {
@@ -99,6 +116,9 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             }
             ConnectorConfig::Wpeng(wpeng) => {
                 wpeng.apply().await?;
+            }
+            ConnectorConfig::Ledfx(ledfx) => {
+                ledfx.apply().await?;
             }
         }
     }
