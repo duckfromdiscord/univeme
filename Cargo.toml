@@ -1,0 +1,18 @@
+[package]
+name = "univeme"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1.85"
+clap = { version = "4.5.27", features = ["derive"] }
+custom_error = "1.9.2"
+pprefox-rs = { git = "https://github.com/duckfromdiscord/pprefox-rs", version = "0.1.0" }
+registry = "1.3.0"
+reqwest = { version = "0.12.12", features = ["json"] }
+serde = { version = "1.0.217", features = ["derive"] }
+tokio = { version = "1.43.0", features = ["macros"] }
+toml = "0.8.19"
+utfx = "0.1.0"
+winsafe = { version = "0.0.22", features = ["user"] }
+wpeng-rs = { git = "https://github.com/duckfromdiscord/wpeng-rs", version = "0.1.0" }

@@ -1,0 +1,16 @@
+name = "Miku"
+author = "duck"
+
+[[pprefox]]
+comment = "https://addons.mozilla.org/en-US/firefox/addon/hatsune-miku-pixel"
+endpoint = "http://127.0.0.1:8080/"
+theme_name = "Miku Miku"
+
+[[windows]]
+comment = "https://github.com/supermariofps/hatsune-miku-windows-linux-cursors/releases/download/1.2.6/miku-cursor-windows.zip"
+cursor_scheme = "Miku"
+
+[[wpeng]]
+comment = "https://steamcommunity.com/sharedfiles/filedetails/?id=1332106311"
+desktop_id = 0
+name = "初音ミクHatsune Miku -Digital Clock"

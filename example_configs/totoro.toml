@@ -1,0 +1,12 @@
+name = "Totoro"
+author = "duck"
+
+[[pprefox]]
+comment = "https://addons.mozilla.org/en-US/firefox/addon/totoro-better-colors"
+endpoint = "http://127.0.0.1:8080/"
+theme_name = "Totoro (better colors)"
+
+[[wpeng]]
+comment = "https://steamcommunity.com/sharedfiles/filedetails/?id=2891663007"
+desktop_id = 0
+name = "Totoro"
