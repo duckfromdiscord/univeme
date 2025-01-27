@@ -63,3 +63,9 @@ Not setting a `scene_name` will deactivate all scenes.
 endpoint = "http://127.0.0.1:8888/"
 scene_name = "..."
 ```
+
+## Linux use
+
+It compiles on Linux, but you cannot use Wallpaper Engine, and of course not the Windows-specific settings. Firefox themes through `pprefox` won't work since you cannot install with `natemess` on Linux yet.
+
+You will need the usual Linux packages, for Ubuntu they are installed with `sudo apt install pkg-config libssl-dev`.

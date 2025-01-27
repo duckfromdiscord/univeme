@@ -2,7 +2,9 @@ use std::error::Error;
 
 pub mod ledfx;
 pub mod pprefox;
+#[cfg(windows)]
 pub mod windows;
+#[cfg(windows)]
 pub mod wpeng;
 
 #[async_trait::async_trait]

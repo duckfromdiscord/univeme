@@ -49,7 +49,9 @@ impl Ledfx {
             None => Err(LedfxError::MissingEndpoint.into()),
         }
     }
-    pub async fn get_available_scenes(&self) -> Result<HashMap<String, String>, Box<dyn Error + 'static>> {
+    pub async fn get_available_scenes(
+        &self,
+    ) -> Result<HashMap<String, String>, Box<dyn Error + 'static>> {
         let url = self.get_endpoint()?.join("/api/scenes")?;
         let resp = reqwest::get(url)
             .await?
@@ -57,7 +59,10 @@ impl Ledfx {
             .await?
             .scenes
             .ok_or(LedfxError::ServerFailure)?;
-        Ok(resp.iter().map(|f| (f.1.name.clone(), f.0.to_string())).collect::<HashMap<String, String>>())
+        Ok(resp
+            .iter()
+            .map(|f| (f.1.name.clone(), f.0.to_string()))
+            .collect::<HashMap<String, String>>())
     }
 }
 

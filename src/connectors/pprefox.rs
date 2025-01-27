@@ -8,9 +8,9 @@
   - Theme ID: Option<String> - The ID of the theme to set. None to leave unchanged.
 */
 
-use std::{collections::HashMap, error::Error};
-
 use reqwest::Url;
+use serde::{Deserialize, Serialize};
+use std::{collections::HashMap, error::Error};
 
 use super::Connector;
 
@@ -24,6 +24,12 @@ pub struct Pprefox {
     pub theme_id: Option<String>,
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
+struct Theme {
+    pub name: String,
+    pub id: String,
+}
+
 impl Pprefox {
     fn get_endpoint(&self) -> Result<Url, Box<dyn Error + 'static>> {
         match &self.endpoint {
@@ -35,10 +41,7 @@ impl Pprefox {
         &self,
     ) -> Result<HashMap<String, String>, Box<dyn Error + 'static>> {
         let url = self.get_endpoint()?.join("/get_themes")?;
-        let resp = reqwest::get(url)
-            .await?
-            .json::<Vec<pprefox_rs::json::Theme>>()
-            .await;
+        let resp = reqwest::get(url).await?.json::<Vec<Theme>>().await;
         // Use name as the hash and ID as the value, so we can index by name
         match resp {
             Ok(resp) => Ok(resp

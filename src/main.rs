@@ -1,18 +1,31 @@
 use clap::Parser;
 use reqwest::Url;
-use std::{collections::HashMap, fs, str::FromStr};
+
+#[cfg(windows)]
+use std::collections::HashMap;
+
+use std::{fs, str::FromStr};
+
+use univeme::connectors::pprefox::Pprefox;
+
+#[cfg(windows)]
+use univeme::connectors::windows::{CursorScheme, Windows};
+
+#[cfg(windows)]
+use univeme::connectors::wpeng::Wpeng;
+
 use univeme::{
-    connectors::{
-        ledfx::Ledfx, pprefox::Pprefox, windows::{CursorScheme, Windows}, wpeng::Wpeng, Connector
-    },
+    connectors::{ledfx::Ledfx, Connector},
     toml::Config,
 };
 
 pub enum ConnectorConfig {
     Pprefox(Pprefox),
+    #[cfg(windows)]
     Windows(Windows),
+    #[cfg(windows)]
     Wpeng(Wpeng),
-    Ledfx(Ledfx)
+    Ledfx(Ledfx),
 }
 
 /// the universal theme tool
@@ -30,6 +43,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     let config: Config = toml::from_str(&toml_contents).unwrap();
     // We will loop through and apply each one soon
     let mut connectors: Vec<ConnectorConfig> = vec![];
+    #[cfg(windows)]
     for pprefox in config.pprefox.unwrap_or_default() {
         // Parse endpoint to URL here so we can use Try
         let endpoint = match pprefox.endpoint {
@@ -49,7 +63,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
         }
         connectors.push(ConnectorConfig::Pprefox(connector));
     }
-
+    #[cfg(windows)]
     if let Some(windows) = config.windows {
         let mut available_cursors = HashMap::new();
         for system_cursor in Windows::get_system_cursor_schemes().unwrap_or_default() {
@@ -74,6 +88,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
             connectors.push(ConnectorConfig::Windows(connector));
         }
     }
+    #[cfg(windows)]
     match config.wpeng {
         None => (),
         Some(wallpapers) => {
@@ -108,12 +123,17 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error + 'static>> {
     }
     for connector in connectors {
         match connector {
+            #[allow(unused_variables)]
             ConnectorConfig::Pprefox(pprefox) => {
+                // Remove this line once pprefox will work on Linux.
+                #[cfg(windows)]
                 pprefox.apply().await?;
             }
+            #[cfg(windows)]
             ConnectorConfig::Windows(windows) => {
                 windows.apply().await?;
             }
+            #[cfg(windows)]
             ConnectorConfig::Wpeng(wpeng) => {
                 wpeng.apply().await?;
             }
